@@ -22,7 +22,7 @@ class _HomePageState extends State<HomePage> {
           fit:StackFit.expand,
           children: <Widget>[
             Container (
-              margin: EdgeInsets.only(top: 120),
+              margin: EdgeInsets.only(top: 170),
               alignment: Alignment.topCenter,
               child: Column(
                 children: <Widget>[
@@ -30,21 +30,25 @@ class _HomePageState extends State<HomePage> {
                     "Here's gonna be icon \n also circle must be bigger"
                   ),
                   Text(
-                "0 / (light Color) 100",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 25.0,
-                  fontWeight: FontWeight.bold,
-                  foreground: Paint()..shader = linearGradient,
-                ),
-                ),
+                    "70",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 25.0,
+                      fontWeight: FontWeight.bold,
+                      foreground: Paint()..shader = linearGradient,
+                    ),
+                  ),
                 ],
               ),
             ),
-            FlareActor(
-              "assets/progress.flr",
+            Container(
+              margin: EdgeInsets.only(top: 50),
               alignment: Alignment.topCenter,
-              animation: "0to100"
+              child: FlareActor(
+                "assets/progress.flr",
+                alignment: Alignment.topCenter,
+                animation: "0to100"
+              ),
             ),
           ],
         ),
