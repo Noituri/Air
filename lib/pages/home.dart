@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flare_flutter/flare_actor.dart';
+import 'package:air/controller/progress_controller.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key, this.title}) : super(key: key);
@@ -10,14 +11,29 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
 
   final Shader linearGradient = LinearGradient(colors: <Color>[Color(0xffDA44bb), Color(0xff8921aa)],).createShader(Rect.fromLTWH(0.0, 0.0, 200.0, 70.0));
+
+  ProgressController _progressController;
+
+  @override
+  void initState() {
+    _progressController = ProgressController(updated: _update(), value: 1);
+    WidgetsBinding.instance.addPostFrameCallback((_) => _progressController.playAnimation = true);
+
+    super.initState();
+  }
+
+  _update() => setState((){});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
+        decoration: BoxDecoration(
+          color: Colors.black,
+        ),
         child: Stack(
           fit:StackFit.expand,
           children: <Widget>[
@@ -46,8 +62,9 @@ class _HomePageState extends State<HomePage> {
               alignment: Alignment.topCenter,
               child: FlareActor(
                 "assets/progress.flr",
+                controller: _progressController,
                 alignment: Alignment.topCenter,
-                animation: "0to100"
+                // animation: "0to100"
               ),
             ),
           ],
