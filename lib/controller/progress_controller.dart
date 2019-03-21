@@ -10,9 +10,6 @@ import 'package:flutter/animation.dart';
 typedef void OnUpdated();
 
 class ProgressController extends FlareController {
-  static const double MixSpeed = 10;
-  static const double FPS = 60;
-
   final OnUpdated updated;
   double value;
 
