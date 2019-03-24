@@ -21,6 +21,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
 
   double testVal = .21;
 
+  final _searchColor = Color(0xFF474747);
+
   @override
   void initState() {
     _progressController = ProgressController(updated: _update(), value: testVal);
@@ -59,6 +61,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
 
   @override
   Widget build(BuildContext context) {
+    // TODO: separate this
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
@@ -68,32 +71,61 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
           fit:StackFit.expand,
           children: <Widget>[
             Container (
-              margin: EdgeInsets.only(top: 255),
+              margin: EdgeInsets.only(top: 305),
               alignment: Alignment.topCenter,
-              child: Column(
-                children: <Widget>[
-                  Opacity(
-                    opacity: .5,
-                    child: Text(
-                      "70",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 25.0,
-                        fontWeight: FontWeight.bold,
-                        color: _animation.value,
-                      ),
-                    ),
-                  )
-                ],
-              ),
+              child: Opacity(
+                opacity: .5,
+                child: Text(
+                  "70",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 25.0,
+                    fontWeight: FontWeight.bold,
+                    color: _animation.value,
+                  ),
+                ),
+              )
             ),
             Container(
-              margin: EdgeInsets.only(top: 50),
+              margin: EdgeInsets.only(top: 100),
               alignment: Alignment.topCenter,
               child: FlareActor(
                 "assets/progress.flr",
                 controller: _progressController,
                 alignment: Alignment.topCenter,
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(top: 50),
+              alignment: Alignment.topCenter,
+              child: TextField(
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                    borderSide: BorderSide(
+                      color: _searchColor,
+                      width: 0,
+                    ),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                    borderSide: BorderSide(
+                      color: _searchColor,
+                      width: 0,
+                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                    borderSide: BorderSide(
+                      color: _searchColor,
+                      width: 0,
+                    ),
+                  ),
+                  filled: true,
+                  hintStyle: new TextStyle(color: Colors.grey[800]),
+                  hintText: "Search",
+                  fillColor: _searchColor,
+                ),
               ),
             ),
           ],
