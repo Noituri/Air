@@ -19,14 +19,14 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   Animation _animation;
   Color _progressColor;
 
-  double testVal = .21;
+  double _testVal = .21;
 
   final _searchColor = Color(0xFF474747);
 
   @override
   void initState() {
-    _progressController = ProgressController(updated: _update(), value: testVal);
-    _progressColor = Utils.getColor(testVal);
+    _progressController = ProgressController(updated: _update(), value: _testVal);
+    _progressColor = Utils.getColor(_testVal);
 
     _controller = AnimationController(
       vsync: this,
