@@ -5,6 +5,8 @@ import 'package:air/utils.dart';
 import 'package:air/pages/search.dart';
 import 'package:air/widgets/search_widget.dart';
 import 'package:flutter/services.dart';
+import 'package:air/widgets/progressbar_widget.dart';
+import 'dart:io';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key, this.title}) : super(key: key);
@@ -18,17 +20,23 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
 
   AnimationController _controller;
-  ProgressController _progressController;
+  List<ProgressController> _progressControllers;
+
   Animation _animation;
   Color _progressColor;
 
   double _testVal = .21;
 
-  final _searchColor = Color(0xFF343434);
-
   @override
   void initState() {
-    _progressController = ProgressController(value: _testVal);
+    _progressControllers = [
+      ProgressController(value: _testVal),
+      ProgressController(value: 0.2),
+      ProgressController(value: 0.4),
+      ProgressController(value: 0.6),
+      ProgressController(value: 1.0),
+      ];
+
     _progressColor = Utils.getColor(_testVal);
 
     _controller = AnimationController(
@@ -47,7 +55,10 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     });
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _progressController.playAnimation = true;
+      _progressControllers.forEach((item) {
+        item.playAnimation = true;
+      });
+
       _controller.forward();
     });
     
@@ -59,8 +70,11 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       statusBarColor: Colors.black,
     ));
 
+    // FIXME: Also it should reset value number animation
     setState(() {
-      _progressController.reset();
+      _progressControllers.forEach((item) {
+        item.reset();
+      });
     });
   }
 
@@ -101,8 +115,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
               margin: EdgeInsets.only(top: 100),
               alignment: Alignment.topCenter,
               child: FlareActor(
-                "assets/progress.flr",
-                controller: _progressController,
+                "assets/progresscircle.flr",
+                controller: _progressControllers[0],
                 alignment: Alignment.topCenter,
               ),
             ),
@@ -110,7 +124,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
               margin: EdgeInsets.only(top: 50, left: 20, right: 20),
               alignment: Alignment.topCenter,
               child: InkWell(
-                onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => SearchPage())).whenComplete(() =>_update()),
+                onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => SearchPage())).whenComplete(() => _update()),
                 child: Hero(
                   tag: "SearchBarTag",
                   child: SearchField(
@@ -119,6 +133,34 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                 ),
               ),
             ),
+            Container(
+              margin: EdgeInsets.only(top: 450, left: 20, right: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  Text(
+                    "New York",
+                    style: TextStyle(
+                      color: _animation.value,
+                      fontSize: 35,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  GradientProgressBar(
+                    _progressControllers[1],
+                  ),
+                  GradientProgressBar(
+                    _progressControllers[2],
+                  ),
+                  GradientProgressBar(
+                    _progressControllers[3],
+                  ),
+                  GradientProgressBar(
+                    _progressControllers[4],
+                  ),
+                ],
+              ),
+            )
           ],
         ),
       ),
