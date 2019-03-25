@@ -5,15 +5,13 @@ import 'package:flare_flutter/flare.dart';
 import 'package:flare_dart/math/mat2d.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flare_flutter/flare_controller.dart';
-import 'package:flutter/animation.dart';
 
 typedef void OnUpdated();
 
 class ProgressController extends FlareController {
-  final OnUpdated updated;
   double value;
 
-  ProgressController({this.updated, this.value});
+  ProgressController({this.value});
 
   bool playAnimation = false;
 
@@ -47,6 +45,10 @@ class ProgressController extends FlareController {
 
   easeOut(double t, double b, double c, double d) {
     return -c * (t /= d) * (t - 2) + b;
+  }
+
+  reset() {
+    _progressAnimation.time = 0;
   }
 	
 }

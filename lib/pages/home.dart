@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:air/controller/progress_controller.dart';
 import 'package:air/utils.dart';
+import 'package:air/pages/search.dart';
+import 'package:air/widgets/search_widget.dart';
+import 'package:flutter/services.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key, this.title}) : super(key: key);
@@ -21,11 +24,11 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
 
   double _testVal = .21;
 
-  final _searchColor = Color(0xFF474747);
+  final _searchColor = Color(0xFF343434);
 
   @override
   void initState() {
-    _progressController = ProgressController(updated: _update(), value: _testVal);
+    _progressController = ProgressController(value: _testVal);
     _progressColor = Utils.getColor(_testVal);
 
     _controller = AnimationController(
@@ -51,7 +54,15 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     super.initState();
   }
 
-  _update() => setState((){});
+  _update() {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Colors.black,
+    ));
+
+    setState(() {
+      _progressController.reset();
+    });
+  }
 
   @override
   void dispose() {
@@ -68,7 +79,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
           color: Colors.black,
         ),
         child: Stack(
-          fit:StackFit.expand,
+          fit: StackFit.expand,
           children: <Widget>[
             Container (
               margin: EdgeInsets.only(top: 305),
@@ -96,35 +107,15 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
               ),
             ),
             Container(
-              margin: EdgeInsets.only(top: 50),
+              margin: EdgeInsets.only(top: 50, left: 20, right: 20),
               alignment: Alignment.topCenter,
-              child: TextField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(30.0)),
-                    borderSide: BorderSide(
-                      color: _searchColor,
-                      width: 0,
-                    ),
+              child: InkWell(
+                onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => SearchPage())).whenComplete(() =>_update()),
+                child: Hero(
+                  tag: "SearchBarTag",
+                  child: SearchField(
+                    enabled: false,
                   ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(30.0)),
-                    borderSide: BorderSide(
-                      color: _searchColor,
-                      width: 0,
-                    ),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(30.0)),
-                    borderSide: BorderSide(
-                      color: _searchColor,
-                      width: 0,
-                    ),
-                  ),
-                  filled: true,
-                  hintStyle: new TextStyle(color: Colors.grey[800]),
-                  hintText: "Search",
-                  fillColor: _searchColor,
                 ),
               ),
             ),
