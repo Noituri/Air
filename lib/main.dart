@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:air/pages/loading.dart';
 import 'pages/home.dart';
 
 void main() {
@@ -15,7 +16,7 @@ class App extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: HomePage(title: 'Air*'),
+      home: LoadingPage(),
     );
   }
 }

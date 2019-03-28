@@ -12,7 +12,7 @@ class GradientProgressBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.center,
-      height: 50,
+      height: 35,
       child: FlareActor(
         "assets/progressbar.flr",
         controller: progressController,

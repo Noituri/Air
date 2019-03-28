@@ -6,12 +6,9 @@ import 'package:air/pages/search.dart';
 import 'package:air/widgets/search_widget.dart';
 import 'package:flutter/services.dart';
 import 'package:air/widgets/progressbar_widget.dart';
-import 'dart:io';
 
 class HomePage extends StatefulWidget {
-  HomePage({Key key, this.title}) : super(key: key);
-
-  final String title;
+  HomePage({Key key}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -21,6 +18,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
 
   AnimationController _controller;
   List<ProgressController> _progressControllers;
+  ScrollController _scrollController = new ScrollController();
 
   Animation _animation;
   Color _progressColor;
@@ -29,14 +27,11 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
 
   @override
   void initState() {
-    _progressControllers = [
-      ProgressController(value: _testVal),
-      ProgressController(value: 0.2),
-      ProgressController(value: 0.4),
-      ProgressController(value: 0.6),
-      ProgressController(value: 1.0),
-      ];
+    _progressControllers = [];
 
+    for (var i = 0; i < 7; i++) {
+      _progressControllers.add(ProgressController(value: i / 6));
+    }
     _progressColor = Utils.getColor(_testVal);
 
     _controller = AnimationController(
@@ -76,6 +71,11 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         item.reset();
       });
     });
+    _scrollController.animateTo(
+      0.0,
+      curve: Curves.easeInOut,
+      duration: Duration(milliseconds: 300),
+    );
   }
 
   @override
@@ -92,34 +92,9 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         decoration: BoxDecoration(
           color: Colors.black,
         ),
-        child: Stack(
-          fit: StackFit.expand,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Container (
-              margin: EdgeInsets.only(top: 305),
-              alignment: Alignment.topCenter,
-              child: Opacity(
-                opacity: .5,
-                child: Text(
-                  "70",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 25.0,
-                    fontWeight: FontWeight.bold,
-                    color: _animation.value,
-                  ),
-                ),
-              )
-            ),
-            Container(
-              margin: EdgeInsets.only(top: 100),
-              alignment: Alignment.topCenter,
-              child: FlareActor(
-                "assets/progresscircle.flr",
-                controller: _progressControllers[0],
-                alignment: Alignment.topCenter,
-              ),
-            ),
             Container(
               margin: EdgeInsets.only(top: 50, left: 20, right: 20),
               alignment: Alignment.topCenter,
@@ -133,34 +108,140 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                 ),
               ),
             ),
-            Container(
-              margin: EdgeInsets.only(top: 450, left: 20, right: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
+            Expanded(
+              child: ListView(
+                controller: _scrollController,
+                scrollDirection: Axis.vertical,
                 children: <Widget>[
-                  Text(
-                    "New York",
-                    style: TextStyle(
-                      color: _animation.value,
-                      fontSize: 35,
-                      fontWeight: FontWeight.bold,
+                  Stack(
+                    children: <Widget>[
+                      Container(
+                        height: MediaQuery.of(context).size.height / 2,
+                        alignment: Alignment.topCenter,
+                        child: FlareActor(
+                          "assets/progresscircle.flr",
+                          controller: _progressControllers[0],
+                          alignment: Alignment.topCenter,
+                        ),
+                      ),
+                      Container (
+                        margin: EdgeInsets.only(top: 210),
+                        alignment: Alignment.topCenter,
+                        child: Opacity(
+                          opacity: .5,
+                          child: Text(
+                            "70",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 25.0,
+                              fontWeight: FontWeight.bold,
+                              color: _animation.value,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 15.0),
+                    child: Text(
+                      "New York",
+                      style: TextStyle(
+                        color: _animation.value,
+                        fontSize: 35,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
-                  GradientProgressBar(
-                    _progressControllers[1],
-                  ),
-                  GradientProgressBar(
-                    _progressControllers[2],
-                  ),
-                  GradientProgressBar(
-                    _progressControllers[3],
-                  ),
-                  GradientProgressBar(
-                    _progressControllers[4],
-                  ),
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 15.0, vertical: 5.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Container(
+                          margin: EdgeInsets.only(left: 8.0, top: 8.0),
+                          child: Text(
+                            "PM25",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                            ),
+                          ),
+                        ),
+                        GradientProgressBar(
+                          _progressControllers[1],
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(left: 8.0, top: 8.0),
+                          child: Text(
+                            "PM10",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                            ),
+                          ),
+                        ),
+                        GradientProgressBar(
+                          _progressControllers[2],
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(left: 8.0, top: 8.0),
+                          child: Text(
+                            "SO\u2082",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                            ),
+                          ),
+                        ),
+                        GradientProgressBar(
+                          _progressControllers[3],
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(left: 8.0, top: 8.0),
+                          child: Text(
+                            "CO",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                            ),
+                          ),
+                        ),
+                        GradientProgressBar(
+                          _progressControllers[4],
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(left: 8.0, top: 8.0),
+                           child: Text(
+                            "NO\u2082",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                            ),
+                          ),
+                        ),
+                        GradientProgressBar(
+                          _progressControllers[5],
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(left: 8.0, top: 8.0),
+                           child: Text(
+                            "O\u2083",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                            ),
+                          ),
+                        ),
+                        GradientProgressBar(
+                          _progressControllers[6],
+                        ),
+                      ],
+                    ),
+                  )
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),
